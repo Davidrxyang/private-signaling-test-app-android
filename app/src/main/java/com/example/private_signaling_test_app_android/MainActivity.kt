@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
             Private_signaling_test_app_androidTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = "Android - Private Signaling Test App",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -42,6 +42,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     Private_signaling_test_app_androidTheme {
-        Greeting("Android")
+        Greeting("Android - private signaling test app")
     }
 }
