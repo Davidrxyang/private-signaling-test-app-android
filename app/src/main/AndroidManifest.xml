@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    package="com.example.private_signaling_test_app_android"> <!-- Ensure this package name is correct -->
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Add POST_NOTIFICATIONS permission for Android 13+ -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
 
     <application
         android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Private_signaling_test_app_android">
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -18,10 +24,28 @@
             android:theme="@style/Theme.Private_signaling_test_app_android">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+        <!-- Add your FirebaseMessagingService here -->
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!-- Optional: You can also set a default notification icon and color for FCM messages
+             that are automatically displayed by the system when your app is in the background. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_launcher_foreground" /> <!-- Replace with your notification icon -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/my_notification_color" /> <!-- Replace with your desired color -->
+
+    </application>
 </manifest>
+
