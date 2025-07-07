@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "80166243790",
+    "project_id": "privatesignalingtest-b28dae8e",
+    "storage_bucket": "privatesignalingtest-b28dae8e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:80166243790:android:80890d466ee937677f6f9f",
+        "android_client_info": {
+          "package_name": "com.example.private_signaling_test_app_android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAlUYjMNRpIZNQ6SNOw_N5D-QJHDHfrMQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
