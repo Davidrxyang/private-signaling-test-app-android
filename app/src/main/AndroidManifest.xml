@@ -4,6 +4,7 @@
     package="com.example.private_signaling_test_app_android"> <!-- Ensure this package name is correct -->
 
     <uses-permission android:name="android.permission.INTERNET"/>
+
     <!-- Add POST_NOTIFICATIONS permission for Android 13+ -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
