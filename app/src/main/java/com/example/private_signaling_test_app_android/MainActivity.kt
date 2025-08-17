@@ -19,9 +19,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.example.private_signaling_test_app_android.ui.theme.Private_signaling_test_app_androidTheme
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.ktx.messaging
+import com.google.firebase.Firebase
+import com.google.firebase.messaging.messaging
 import kotlinx.coroutines.*
+import me.pushy.sdk.Pushy
+
+
 
 class MainActivity : ComponentActivity() {
 
@@ -34,6 +37,8 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+    // this function generates a pop up on the device and asks the user to enable
+    // push notifications
     private fun askNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
@@ -62,6 +67,33 @@ class MainActivity : ComponentActivity() {
             }
             val token = task.result
             Log.d(TAG, "FCM Registration Token: $token")
+        }
+
+        // pushy
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                if (!Pushy.isRegistered(applicationContext)) {
+                    val pushyToken = Pushy.register(applicationContext)
+                    Log.d(TAG, "Pushy Registration Token: $pushyToken")
+                    // Optional: send to your backend under a "pushy_token" field
+                } else {
+                    Thread {
+                        try {
+                            val pushyToken = Pushy.register(this@MainActivity)
+                            Log.d("Pushy", "Device token: $pushyToken")
+                        } catch (e: Exception) {
+                            Log.e("Pushy", "Pushy registration failed", e)
+                        }
+                    }.start()
+                }
+
+                // Ensure notifications are shown when app is in background
+                withContext(Dispatchers.Main) {
+                    Pushy.toggleNotifications(true, applicationContext)
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Pushy registration failed", e)
+            }
         }
 
         setContent {
@@ -123,7 +155,7 @@ fun NotificationTestUI() {
                             delay(delay * 1000L)
                             NotificationUtils.sendNotification(
                                 context = context,
-                                messageTitle = "Test Push Notification",
+                                messageTitle = "Local Notification",
                                 messageBody = message.text
                             )
                         }

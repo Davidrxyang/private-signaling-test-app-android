@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.private_signaling_test_app_android"> <!-- Ensure this package name is correct -->
+    package="com.example.private_signaling_test_app_android">
 
+    <!-- Required permissions -->
     <uses-permission android:name="android.permission.INTERNET"/>
-
-    <!-- Add POST_NOTIFICATIONS permission for Android 13+ -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!-- Android 13+ runtime notifications -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-
 
     <application
         android:allowBackup="true"
@@ -16,7 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Private_signaling_test_app_android">
-
 
         <activity
             android:name=".MainActivity"
@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
 
-        <!-- Add your FirebaseMessagingService here -->
+        <!-- FCM service (unchanged) -->
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false">
@@ -38,15 +38,54 @@
             </intent-filter>
         </service>
 
-        <!-- Optional: You can also set a default notification icon and color for FCM messages
-             that are automatically displayed by the system when your app is in the background. -->
+        <!-- Optional FCM defaults -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_launcher_foreground" /> <!-- Replace with your notification icon -->
+            android:resource="@drawable/ic_launcher_foreground" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/my_notification_color" /> <!-- Replace with your desired color -->
+            android:resource="@color/my_notification_color" />
+
+        <!-- Pushy receiver: class must match your Kotlin class name & package -->
+        <receiver
+            android:name=".PushyNotificationReceiver"
+            android:exported="false">
+            <intent-filter>
+                <!-- REQUIRED Pushy action -->
+                <action android:name="pushy.me" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Pushy restarts after device reboot -->
+        <receiver
+            android:name="me.pushy.sdk.receivers.PushyBootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- Recommended: restart after app update -->
+        <receiver
+            android:name="me.pushy.sdk.receivers.PushyUpdateReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- REQUIRED by Pushy SDK >= 1.0.35 -->
+        <service
+            android:name="me.pushy.sdk.services.PushyJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true" />
+
+        <!-- Pushy socket service -->
+        <service
+            android:name="me.pushy.sdk.services.PushySocketService"
+            android:exported="false"
+            android:stopWithTask="false" />
 
     </application>
 </manifest>
-

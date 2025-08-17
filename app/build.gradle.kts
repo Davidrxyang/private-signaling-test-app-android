@@ -60,7 +60,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation(platform("com.google.firebase:firebase-bom:33.16.0"))
-    implementation("com.google.firebase:firebase-messaging-ktx") // Add this line
+    implementation(platform("com.google.firebase:firebase-bom:34.1.0"))
 
+    // FCM
+    implementation("com.google.firebase:firebase-messaging")
+
+    // Pushy
+    implementation("me.pushy:sdk:1.0.124")
 }
